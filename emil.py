@@ -1,6 +1,52 @@
-i>900un'9A8B7CCuuuuA8Fui'89P8n'9A8g08>FSu0i.'8DB7CCuuuuuuuu29007CC7CC7CCi>900u=8PP8'n'9A8gn'9A8DB7CCuuuuA8Fui'89P8n'9A8g08>FSu0i.'8DB7CCuuuuuuuumFu0i.'8uvuqcB7CCuuuuuuuuuuuu'8Pl'aus s7CCuuuuuuuu8>mFu0i.'8uvuGcB7CCuuuuuuuuuuuu'8Pl'ausrs7CCuuuuuuuu8>mFu0i.'8uvudcBu7CCuuuuuuuuuuuu'8Pl'auses7CCuuuuuuuu8>08B7CCuuuuuuuuuuuu'8Pl'aus:s7CC7CCi>900u
-900:9m>n'9A8gn'9A8DB7CCuuuuA8Fui'89P8n'9A8g08>FSu0i.'8DB7CCuuuuuuuumFu0i.'8uvudcB7CCuuuuuuuuuuuu'8Pl'aus
-s7CCuuuuuuuu8>08B7CCuuuuuuuuuuuu'8Pl'aus:s7CC7CC7CCi>900ue.l'08B7CCuuuuA8Fui'89P8n'9A8'g08>FDB7CCuuuuuuuu29007CC7CCuuuuA8Fu$8Pfi.'8g08>FSu0i.'8DB7CCuuuuuuuu'8Pl'au08>Fti'89P8n'9A8'gDti'89P8n'9A8g0i.'8D7CC7CC7CCi>900u=8PP8'e.l'08ge.l'08DB7CCuuuuA8Fui'89P8n'9A8'g08>FDB7CCuuuuuuuu'8Pl'au=8PP8'n'9A8gD7CC7CCi>900u
-900:9m>e.l'08ge.l'08DB7CCuuuuA8Fui'89P8n'9A8'g08>FDB7CCuuuuuuuu'8Pl'au
-900:9m>n'9A8gD7CC7CC7CCi>900u(mFF8'8aPn'9A8gn'9A8DB7CCuuuuA8Fui'89P8n'9A8g08>FSu0i.'8DB7CCuuuuuuuu'8Pl'aus:s7CC7CCi>900ufPl2mAe.l'08ge.l'08DB7CCuuuuA8Fui'89P8n'9A8'g08>FDB7CCuuuuuuuu'8Pl'au(mFF8'8aPn'9A8gD7CC7CC7CC7CC7CCi>900ufPl2mAe.l'08,B7CCuuuuA8Fu$8Pfi.'8g08>FSu0i.'8DB7CCuuuuuuuu'8Pl'aus:s7CC7CC7CC2>uou=8PP8'e.l'08gD7CC2'maPgsfi.'8uF.'uqcum0uousSu2>t$8Pfi.'8gqcDD7CC)9a90.p8A8am9uou
-900:9m>e.l'08gD7CC2'maPgsfi.'8uF.'udcum0uousSu)9a90.p8A8am9t$8Pfi.'8gdcDD7CC7CCLl9aPl)uoufPl2mAe.l'08gD7CC2'maPgsfi.'8uF.'udcum0uousSuLl9aPl)t$8Pfi.'8gdcDD7CC7CCLl9aPl),uoufPl2mAe.l'08,gD7CC2'maPgsfi.'8uF.'udcum0uousSuLl9aPl),t$8Pfi.'8gdcDD
+from collections import defaultdict
+
+class Listing:
+    def __init__(self, make, price, year):
+        self.make = make
+        self.price = price
+        self.year = year
+    
+class EventBus:
+    def __init__(self):
+        self.subscribers = defaultdict(list)
+    
+    def subscribe(self, event, observer):
+        self.subscribers[event].append(observer)
+    
+    def unsubscribe(self, evnet, observer):
+        self.subscribers[event].remove(observer)
+
+    def publish(self, event, listing):
+        for i in self.subscribers[event]:
+            i.update(event, listing)
+
+
+class Observer:
+    def update(self, event, listing):
+        pass
+
+
+class SavedSearches(Observer):
+    def __init__(self, user, make, price_from, price_to):
+        self.user = user
+        self.make = make
+        self.price_from = price_from
+        self.price_to = price_to
+
+    def update(self, event, listing):
+        if self.make == listing.make and self.price_from <= listing.price <= self.price_to:
+            print(f'sending notifaction to {self.user} on {self.make} which matched {listing.make}, {listing.price}')
+
+class PriceDrop(Observer):
+    def __init__(self, user, make, new_price):
+        self.user = user
+        self.make = make
+        self.new_price = new_price
+
+    def update(self, event, listing):
+        print(f'price change notification email: {self.user} price changed for {listing.make} to {listing.price}')
+
+class TelegramNofication(Observer):
+    pass
+
+
