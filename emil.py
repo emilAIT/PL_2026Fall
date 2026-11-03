@@ -13,7 +13,7 @@ class EventBus:
     def subscribe(self, event, observer):
         self.subscribers[event].append(observer)
     
-    def unsubscribe(self, evnet, observer):
+    def unsubscribe(self, event, observer):
         self.subscribers[event].remove(observer)
 
     def publish(self, event, listing):
@@ -38,15 +38,34 @@ class SavedSearches(Observer):
             print(f'sending notifaction to {self.user} on {self.make} which matched {listing.make}, {listing.price}')
 
 class PriceDrop(Observer):
-    def __init__(self, user, make, new_price):
+    def __init__(self, user, make):
         self.user = user
         self.make = make
-        self.new_price = new_price
 
     def update(self, event, listing):
-        print(f'price change notification email: {self.user} price changed for {listing.make} to {listing.price}')
+        if self.make == listing.make:
+            print(f'price change notification email: {self.user} price changed for {listing.make} to {listing.price}')
 
 class TelegramNofication(Observer):
     pass
 
 
+eventbus = EventBus()
+
+akyl = SavedSearches('emil','bmw', 5000, 8000)
+iskender = SavedSearches('iskender', 'toyota', 1000, 5000)
+altynai = SavedSearches('altynai', 'audi', 10000, 20000)
+
+begimai = PriceDrop('begimai', 'byd')
+sultan = PriceDrop('sultan', 'hyundai')
+
+eventbus.subscribe('saved_search', akyl)
+eventbus.subscribe('saved_search', iskender)
+eventbus.subscribe('saved_search', altynai)
+eventbus.subscribe('price_change', begimai)
+eventbus.subscribe('price_change', sultan)
+
+
+listing1 = Listing('bmw', 1998, 3000)
+listing2 = Listing('toyta', 2000, 15000)
+listing3 = Listing('byd', 20000)
